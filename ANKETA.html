@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <script>
+        let surname = prompt ('Введите вашу фамилию');
+        let name = prompt ('Введите ваше имя');
+        let patronymic = prompt ('Введите ваше отчество');
+        let whatIsYourAge = Number(prompt('Сколько вам лет?'));
+        let fullname = surname + " " + name + " " + patronymic;
+        let ageindays = whatIsYourAge * 365;
+        let age = parseInt(whatIsYourAge)
+        let infiveyears = 5 + age;
+        let notWorking;
+        let genderDimension;
+        let yourGender = confirm("Если вы мужчина, нажмите 'ОК', если нет - нажмите 'Отмена'");
+        if (yourGender > 0) {
+            yourGender = "мужской";
+            if (whatIsYourAge > 63)
+            notWorking = "да";
+            else
+    notWorking = "нет";
+} else {
+    yourGender = "женский";
+    if (whatIsYourAge > 58)
+         notWorking = "да";
+    else
+        notWorking = "нет";
+    }
+        alert (`ваше ФИО: ${fullname}
+        ваш возраст в годах: ${age}
+        ваш возраст в днях: ${ageindays}
+        через 5 лет вам будет: ${infiveyears}
+        ваш пол: ${yourGender}
+        вы на пенсии: ${notWorking}`);
+    </script>
+</body>
+</html>
