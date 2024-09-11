@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Drink Storage</title>
+</head>
+<body>
+  <h1>Хранилище Напитков</h1>
+
+  <section>
+    <h2>Добавить Напиток</h2>
+    <input type="text" id="drink_name" placeholder="Название напитка">
+    <input type="text" id="drink_recipe" placeholder="Рецепт напитка">
+    <button id="add_drink">Добавить</button>
+  </section>
+
+  <section>
+    <h2>Получить Информацию о Напитке</h2>
+    <input type="text" id="get_drink_name" placeholder="Название напитка">
+    <button id="get-drink-btn">Получить Информацию</button>
+  </section>
+
+  <section>
+    <h2>Удалить Напиток</h2>
+    <input type="text" id="delete_drink_name" placeholder="Название напитка">
+    <button id="delete_drink_btn">Удалить</button>
+  </section>
+
+  <section>
+    <h2>Показать Все Напитки</h2>
+    <button id="get_keys_btn">Показать Все Напитки</button>
+  </section>
+
+  <section id="output"></section>
+
+  <script>
+    class HashStorageFunc {
+      constructor() {
+        this.storage = {};
+      }
+
+      addValue(key, value) {
+        this.storage[key] = value;
+      }
+
+      getValue(key) {
+        return this.storage[key];
+      }
+
+      deleteValue(key) {
+        if (key in this.storage) {
+          delete this.storage[key];
+          return true;
+        }
+        return false;
+      }
+
+      getKeys() {
+        return Object.keys(this.storage);
+      }
+    }
+
+    const drinkStorage = new HashStorageFunc();
+
+    document.getElementById('add_drink').addEventListener('click', () => {
+      const name = document.getElementById('drink_name').value;
+      const recipe = document.getElementById('drink_recipe').value;
+      const alcoholic = confirm('Этот напиток алкогольный?');
+      drinkStorage.addValue(name, { alcoholic, recipe });
+      alert(`Напиток "${name}" добавлен.`);
+    });
+
+    document.getElementById('get_drink_btn').addEventListener('click', () => {
+      const name = document.getElementById('get_drink_name').value;
+      const drink = drinkStorage.getValue(name);
+      if (drink) {
+        document.getElementById('output').innerHTML = `
+          <p>Напиток: ${name}</p>
+          <p>Алкогольный: ${drink.alcoholic ? 'Да' : 'Нет'}</p>
+          <p>Рецепт: ${drink.recipe}</p>
+        `;
+      } else {
+        document.getElementById('output').innerHTML = `<p>Напиток "${name}" не найден.</p>`;
+      }
+    });
+
+    document.getElementById('delete-drink-btn').addEventListener('click', () => {
+      const name = document.getElementById('delete-drink-name').value;
+      const result = drinkStorage.deleteValue(name);
+      if (result) {
+        alert(`Напиток "${name}" удалён.`);
+      } else {
+        alert(`Напиток "${name}" не найден.`);
+      }
+    });
+
+    document.getElementById('get-keys-btn').addEventListener('click', () => {
+      const keys = drinkStorage.getKeys();
+      if (keys.length > 0) {
+        document.getElementById('output').innerHTML = `
+          <p>Все напитки:</p>
+          <ul>
+            ${keys.map(key => `<li>${key}</li>`).join('')}
+          </ul>
+        `;  
+      } else {
+        document.getElementById('output').innerHTML = `<p>Нет напитков в хранилище.</p>`;
+      }
+    });
+  </script>
+</body>
+</html>
