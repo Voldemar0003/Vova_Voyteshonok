@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drink Storage</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        input { margin-bottom: 10px; display: block; }
+        button { margin-bottom: 15px; }
+        #drinksListOutput { margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+    <h1>Управление напитками</h1>
+
+    <div>
+        <h2>Добавить напиток</h2>
+        <input type="text" id="drinkName" placeholder="Название напитка" />
+        <input type="text" id="alcoholic" placeholder="Алкогольный (true/false)" />
+        <input type="text" id="recipe" placeholder="Рецепт" />
+        <button id="addDrinkBtn">Добавить напиток</button>
+    </div>
+
+    <div>
+        <h2>Получить напиток</h2>
+        <input type="text" id="getDrinkName" placeholder="Название напитка" />
+        <button id="getDrinkBtn">Получить напиток</button>
+    </div>
+
+    <div>
+        <h2>Удалить напиток</h2>
+        <input type="text" id="deleteDrinkName" placeholder="Название напитка" />
+        <button id="deleteDrinkBtn">Удалить напиток</button>
+    </div>
+
+    <div>
+        <h2>Показать все напитки</h2>
+        <button id="showDrinksBtn">Показать напитки</button>
+    </div>
+
+    <div id="drinksListOutput"></div>
+
+    <script>
+        class HashStorageClass {
+            constructor() {
+                this.storage = {};
+            }
+
+            addValue(key, value) {
+                if (key && value) {
+                    this.storage[key] = value;
+                    return true;
+                }
+                return false;
+            }
+
+            getValue(key) {
+                return this.storage[key] || null;
+            }
+
+            deleteValue(key) {
+                if (this.storage[key]) {
+                    delete this.storage[key];
+                    return true;
+                }
+                return false;
+            }
+
+            getKeys() {
+                return Object.keys(this.storage);
+            }
+        }
+
+        const drinkStorage = new HashStorageClass();
+
+        function addDrink() {
+            const name = document.getElementById('drinkName').value;
+            const alcoholic = document.getElementById('alcoholic').value.toLowerCase() === 'true';
+            const recipe = document.getElementById('recipe').value;
+
+            const drink = { alcoholic, recipe };
+            const added = drinkStorage.addValue(name, drink);
+
+            if (added) {
+                alert(`Напиток "${name}" добавлен!`);
+            } else {
+                alert('Ошибка при добавлении напитка!');
+            }
+
+            document.getElementById('drinkName').value = '';
+            document.getElementById('alcoholic').value = '';
+            document.getElementById('recipe').value = '';
+        }
+
+        function getDrink() {
+            const name = document.getElementById('getDrinkName').value;
+            const drink = drinkStorage.getValue(name);
+
+            if (drink) {
+                alert(`Напиток: ${name}\nАлкогольный: ${drink.alcoholic}\nРецепт: ${drink.recipe}`);
+            } else {
+                alert(`Напиток "${name}" не найден.`);
+            }
+
+            document.getElementById('getDrinkName').value = '';
+        }
+
+        function deleteDrink() {
+            const name = document.getElementById('deleteDrinkName').value;
+            const deleted = drinkStorage.deleteValue(name);
+
+            if (deleted) {
+                alert(`Напиток "${name}" удалён!`);
+            } else {
+                alert(`Напиток "${name}" не найден.`);
+            }
+
+            document.getElementById('deleteDrinkName').value = '';
+        }
+
+        function showDrinks() {
+            const drinksList = drinkStorage.getKeys();
+            const outputDiv = document.getElementById('drinksListOutput');
+
+            if (drinksList.length === 0) {
+                outputDiv.innerHTML = "Список напитков пуст.";
+                return;
+            }
+
+            outputDiv.innerHTML = "<h3>Список всех напитков:</h3>";
+            drinksList.forEach(drinkName => {
+                const drink = drinkStorage.getValue(drinkName);
+                outputDiv.innerHTML += `- Напиток: ${drinkName}, Алкогольный: ${drink.alcoholic}, Рецепт: ${drink.recipe}<br>`;
+            });
+        }
+
+        document.getElementById('addDrinkBtn').onclick = addDrink;
+        document.getElementById('getDrinkBtn').onclick = getDrink;
+        document.getElementById('deleteDrinkBtn').onclick = deleteDrink;
+        document.getElementById('showDrinksBtn').onclick = showDrinks;
+    </script>
+
+</body>
+</html>
